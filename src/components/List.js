@@ -1,20 +1,17 @@
-// import React, { Component } from "react";
+import React from "react";
+import Task from "./Task";
 
-// class List extends Component {
-//     createTasks(tasks) {
-//         return <li key={tasks.key}>{tasks.text}</li>
-//     }
+function List(props) {
+    let tasks = props.tasks;
+    let listItems = tasks.map((task, index) => {
+        console.log(task);
+        return <Task key={index} text={task.text} />
+    }
+    );
+    return (
 
-//     render() {
-//         let todoTasks = this.props.entries;
-//         let listItems = todoTasks.map(this.createTasks);
+        <ul>{listItems}</ul>
+    );
+}
 
-//         return(
-//             <ul className="theList">
-//                 {listItems}
-//             </ul>
-//         );
-//     }
-// };
-
-// export default List;
+export default List;

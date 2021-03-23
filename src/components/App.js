@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import React from "react";
 import Header from "./Header";
 // import TextBox from "./TextBox";
-// import List from "./List";
+import List from "./List";
 import BottomBar from "./BottomBar";
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
       this._inputElement.value = "";
     }
 
-    console.log(this.state.items);
+    // console.log(this.state.items);
 
     e.preventDefault();
   }
@@ -49,17 +49,18 @@ class App extends Component {
       <>
         <Header />
         <div className="TextBox">
-        {/* every time there is a new submission, the addItem method will run */}
+          {/* every time there is a new submission, the addItem method will run */}
           <form className="text-center" onSubmit={this.addItem}>
             <label>
               <input type="text" name="name" ref={(a) => this._inputElement = a} placeholder="Input Task!" />
             </label>
             <input type="submit" value="Submit" />
           </form>
+          <List tasks={this.state.items} />
         </div>
         {/* <TextBox /> */}
         {/* here is where the dynamically rendered list needs to go */}
-            {/* <List entries={this.state.tasks} /> */}
+        {/* <List entries={this.state.tasks} /> */}
         <BottomBar />
       </>
     );
