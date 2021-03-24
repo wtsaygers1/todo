@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 // import React from "react";
 import Header from "./Header";
-// import TextBox from "./TextBox";
 import List from "./List";
 import BottomBar from "./BottomBar";
 
@@ -10,12 +9,11 @@ class App extends Component {
     super(props);
 
     this.state = {
-      items: []
+      items: [],
     };
     // without the .bind(this) nothing is added to the items array
     this.addItem = this.addItem.bind(this);
   }
-
   addItem(e) {
     // what's up with the underscore infront of inputElement???
     if (this._inputElement.value !== "") {
@@ -24,8 +22,17 @@ class App extends Component {
         key: Date.now(),
         // how do I assign the id as the indexed position in the array -- is there a better practice??
         // is that the best practice??
-        id: this.state.items.length
+        id: this.state.items.length,
+        click: false
       };
+      // working with the button
+      // completeButton(c) {
+      //   if (this.click === false) {
+      //     className = "bi bi-circle"
+      //   } else {
+      //     className = "bi check-circle"
+      //   }
+      // };
 
       this.setState((prevState) => {
         return {
@@ -39,15 +46,29 @@ class App extends Component {
     }
 
     // console.log(this.state.items);
-
     e.preventDefault();
   }
 
+  componentDidUpdate() {
+    window.localStorage.setItem("items", JSON.stringify(this.state.items))
+  }
+
+  componentDidMount() {
+    let items = window.localStorage.getItem("items")
+
+    if (items) {
+      this.setState( {items: JSON.parse(items)})
+    } else {
+      window.localStorage.setItem("items", [])
+    }
+  }
 
   render() {
     return (
       <>
-        <Header />
+        <div className="Header">
+          <Header />
+        </div>
         <div className="TextBox">
           {/* every time there is a new submission, the addItem method will run */}
           <form className="text-center" onSubmit={this.addItem}>
@@ -58,10 +79,9 @@ class App extends Component {
           </form>
           <List tasks={this.state.items} />
         </div>
-        {/* <TextBox /> */}
-        {/* here is where the dynamically rendered list needs to go */}
-        {/* <List entries={this.state.tasks} /> */}
-        <BottomBar />
+        <div className="BottomBar text-center">
+          <BottomBar />
+        </div>
       </>
     );
   }
