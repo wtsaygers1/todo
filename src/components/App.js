@@ -10,7 +10,8 @@ class App extends Component {
 
     this.state = {
       items: [],
-      inputElement: ""
+      inputElement: "",
+      checked: false
     };
     // without the .bind(this) nothing is added to the items array
     this.addItem = this.addItem.bind(this);
@@ -31,38 +32,56 @@ class App extends Component {
         checked: false,
         deleted: false
       };
-
       // setState is taking the previous state of items which starts as an empty array and concatenates a
       // new item into the array with each new submission
       this.setState({
-         items: this.state.items.concat(newItem),
-         inputElement: ""
-        });      
+        items: this.state.items.concat(newItem),
+        inputElement: ""
+      });
     }
     // console.log(this.state.items);
     e.preventDefault();
   }
 
   handleChange(event) {
-    this.setState({inputElement: event.target.value});
+    this.setState({ inputElement: event.target.value });
   }
 
   // eventHandler
   deleteButton(key) {
-    console.log("clicked the function from app", key)
+    // console.log("clicked the function from app", key)
     const deletedArr = this.state.items.map((item, index) => {
       if (key === item.key) {
-        console.log("found the item", item, key);
-        item.deleted = true
+        // console.log("found the item", item, key);
+        item.deleted = !item.deleted
       }
       return item
     });
     this.setState({ items: deletedArr })
   }
-  checkButton() {
-    console.log("clicked the function from app")
+  checkButton(key) {
+    // console.log("clicked the function from app", key)
+    const checkedArr = this.state.items.map((item, index) => {
+      if (key === item.key) {
+        // console.log("found the item", item, key);
+        item.checked = !item.checked;
+      }
+      return item
+    });
+    this.setState({ 
+      items: checkedArr, 
+      checked: true
+      // is this where I can toggle the button???
+    })
   }
-
+  
+//   numLeft(items) {
+//     if(this.state.items.length === 1){
+//         `${this.state.items.length} item left`;
+//     } else {
+//         `${this.state.items.length} items left`;
+//     }
+//  }
 
   componentDidUpdate() {
     window.localStorage.setItem("items", JSON.stringify(this.state.items))
@@ -101,6 +120,9 @@ class App extends Component {
         </div>
         <div className="BottomBar text-center">
           <BottomBar />
+        </div>
+        <div className="text-center">
+          <p>numLeft()</p>
         </div>
       </>
     );
