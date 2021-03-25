@@ -10,8 +10,7 @@ class App extends Component {
 
     this.state = {
       items: [],
-      inputElement: "",
-      checked: false
+      inputElement: ""
     };
     // without the .bind(this) nothing is added to the items array
     this.addItem = this.addItem.bind(this);
@@ -30,7 +29,8 @@ class App extends Component {
         // is that the best practice??
         id: this.state.items.length,
         checked: false,
-        deleted: false
+        deleted: false,
+        filtered: "all"
       };
       // setState is taking the previous state of items which starts as an empty array and concatenates a
       // new item into the array with each new submission
@@ -45,6 +45,20 @@ class App extends Component {
 
   handleChange(event) {
     this.setState({ inputElement: event.target.value });
+  }
+  
+  componentDidUpdate() {
+    window.localStorage.setItem("items", JSON.stringify(this.state.items))
+  }
+  
+  componentDidMount() {
+    let items = window.localStorage.getItem("items")
+  
+    if (items) {
+      this.setState({ items: JSON.parse(items) })
+    } else {
+      window.localStorage.setItem("items", [])
+    }
   }
 
   // eventHandler
@@ -68,37 +82,22 @@ class App extends Component {
       }
       return item
     });
-    this.setState({ 
-      items: checkedArr, 
-      checked: true
+    this.setState({ items: checkedArr })
       // is this where I can toggle the button???
-    })
   }
   
-//   numLeft(items) {
-//     if(this.state.items.length === 1){
-//         `${this.state.items.length} item left`;
-//     } else {
-//         `${this.state.items.length} items left`;
-//     }
-//  }
-
-  componentDidUpdate() {
-    window.localStorage.setItem("items", JSON.stringify(this.state.items))
-  }
-
-  componentDidMount() {
-    let items = window.localStorage.getItem("items")
-
-    if (items) {
-      this.setState({ items: JSON.parse(items) })
+  numLeft(items) {
+    if(this.state.items.length === 1){
+        return `${this.state.items.length} item left`;
     } else {
-      window.localStorage.setItem("items", [])
+        return `${this.state.items.length} items left`;
     }
-  }
-
+ }
 
   render() {
+
+   
+
     return (
       <>
         <div className="Header">
@@ -122,7 +121,7 @@ class App extends Component {
           <BottomBar />
         </div>
         <div className="text-center">
-          <p>numLeft()</p>
+          <p>{this.numLeft()}</p>
         </div>
       </>
     );
