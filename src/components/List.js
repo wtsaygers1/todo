@@ -18,3 +18,26 @@ function List(props) {
 }
 
 export default List;
+
+// class List extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.tasks = this.props.tasks;
+//         this.listItems = tasks.map((task, index) => {
+//             // console.log(task);
+//             return <Task
+//                 key={this.props.index}
+//                 task={this.props.task}
+//                 deleteButton={this.props.deleteButton}
+//                 checkButton={this.props.checkButton}
+//             />
+//         });
+//     }
+//     render() {
+//         return (
+//             <ul>{listItems}</ul>
+//         );
+//     }
+// }
+
+// export default List;
