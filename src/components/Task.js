@@ -25,8 +25,8 @@ class Task extends React.Component {
                     <li>
                         {/* trying out this onClick inline function to turn click in addItem true in App.js */}
                         {/* can try an alert as well to make sure button is firing */}
-                        <button className={this.props.task.checked ? "btn bi bi-check-circle" : "btn bi bi-circle"} onClick={() => this.props.checkButton(this.props.task.key)}></button>
-                        <span className={this.props.task.deleted ? "text-decoration-line-through" : null}>{this.props.task.text}</span>
+                        <button className={this.props.task.checked ? "btn bi bi-check-circle text-decoration-line-through" : "btn bi bi-circle"} onClick={() => this.props.checkButton(this.props.task.key)}></button>
+                        <span className={this.props.task.checked ? "text-decoration-line-through" : null}>{this.props.task.text}</span>
                         <button className="btn bi bi-x-circle" onClick={() => this.props.deleteButton(this.props.task.key)}></button>
                     </li>
                 </div>
