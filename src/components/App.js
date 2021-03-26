@@ -18,8 +18,8 @@ class App extends Component {
     this.checkButton = this.checkButton.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.addItem = this.addItem.bind(this);
-    // this.allButton = this.allButton.bind(this);
     this.bottomButton = this.bottomButton.bind(this);
+    this.clearCompleted = this.clearCompleted.bind(this);
   }
 
   addItem(e) {
@@ -64,10 +64,17 @@ class App extends Component {
   }
 
   // eventHandler
-  deleteButton(deleted) {
-    const deleteItems = this.state.items.filter(item => item.key !== deleted);
-    this.setState({ items: deleteItems });
-  };
+  deleteButton(key) {
+    // console.log("clicked the function from app", key)
+    const deletedArr = this.state.items.map((item, index) => {
+      if (key === item.key) {
+        // console.log("found the item", item, key);
+        item.deleted = !item.deleted;
+      }
+      return item
+    });
+    this.setState({ items: deletedArr })
+  }
 
   checkButton(key) {
     // console.log("clicked the function from app", key)
@@ -81,10 +88,10 @@ class App extends Component {
     this.setState({ items: checkedArr })
   }
 
-  bottomButton(control) {
+  bottomButton(sorttext) {
     this.setState(() => {
-      // console.log(this.activeButton)
-      return { sorted: control }
+      // console.log(this.bottomButton)
+      return { sorted: sorttext }
     });
   }
 
@@ -94,6 +101,18 @@ class App extends Component {
     } else {
       return `${this.state.items.length} items left`;
     }
+  }
+
+  clearCompleted() {
+    const clearCompleted = this.state.items.map((item) => {
+      if (item.checked) {
+        // console.log("found the item", item, key);
+        item.deleted = true;
+      }
+      return item
+      // return new item set deleted to true if completed is true
+    });
+    this.setState({ items: clearCompleted })
   }
 
   render() {
@@ -122,6 +141,7 @@ class App extends Component {
           <BottomBar
             // all, active, completed, and clear completed
             bottomButton={this.bottomButton}
+            clearCompleted={this.clearCompleted}
           />
         </div>
         <div className="text-center">
