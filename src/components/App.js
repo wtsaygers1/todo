@@ -19,7 +19,7 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.addItem = this.addItem.bind(this);
     // this.allButton = this.allButton.bind(this);
-    // this.activeButton = this.activeButton.bind(this);
+    this.bottomButton = this.bottomButton.bind(this);
   }
 
   addItem(e) {
@@ -66,7 +66,7 @@ class App extends Component {
   // eventHandler
   deleteButton(deleted) {
     const deleteItems = this.state.items.filter(item => item.key !== deleted);
-    this.setState({ items: deleteItems});
+    this.setState({ items: deleteItems });
   };
 
   checkButton(key) {
@@ -81,30 +81,12 @@ class App extends Component {
     this.setState({ items: checkedArr })
   }
 
-//   activeButton(key) {
-//     const activeArr = this.state.items.map((item, index) => {
-//       if (key === item.key) {
-//         item.checked = item.checked
-//       }
-//       return item
-//     });
-//     this.setState({ items: activeArr })
-//   }
-
-  // allButton(key) {
-  //   const allArr = this.state.items.filter((item, index) => {
-  //     if (key === item.key) {
-  //       // is something needed??
-  //     }
-  //     return item
-  //   });
-  //   this.setState({ items: allArr })
-  // }
-
-//  clearComButton() {
-
-//  }
-
+  bottomButton(control) {
+    this.setState(() => {
+      // console.log(this.activeButton)
+      return { sorted: control }
+    });
+  }
 
   numLeft() {
     if (this.state.items.length === 1) {
@@ -137,7 +119,10 @@ class App extends Component {
           />
         </div>
         <div className="BottomBar text-center">
-          <BottomBar />
+          <BottomBar
+            // all, active, completed, and clear completed
+            bottomButton={this.bottomButton}
+          />
         </div>
         <div className="text-center">
           <p>{this.numLeft()}</p>
