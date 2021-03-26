@@ -10,18 +10,21 @@ class App extends Component {
 
     this.state = {
       items: [],
-      inputElement: ""
+      inputElement: "",
+      sorted: "all"
     };
     // without the .bind(this) nothing is added to the items array
-    this.addItem = this.addItem.bind(this);
     this.deleteButton = this.deleteButton.bind(this);
     this.checkButton = this.checkButton.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.addItem = this.addItem.bind(this);
+    // this.allButton = this.allButton.bind(this);
+    // this.activeButton = this.activeButton.bind(this);
   }
 
   addItem(e) {
     // what's up with the underscore infront of inputElement???
-    if (e.target.value !== "") {
+    if (this.state.inputElement !== "") {
       let newItem = {
         text: this.state.inputElement,
         key: Date.now(),
@@ -29,8 +32,7 @@ class App extends Component {
         // is that the best practice??
         id: this.state.items.length,
         checked: false,
-        deleted: false,
-        filtered: "all"
+        deleted: false
       };
       // setState is taking the previous state of items which starts as an empty array and concatenates a
       // new item into the array with each new submission
@@ -46,14 +48,14 @@ class App extends Component {
   handleChange(event) {
     this.setState({ inputElement: event.target.value });
   }
-  
+
   componentDidUpdate() {
     window.localStorage.setItem("items", JSON.stringify(this.state.items))
   }
-  
+
   componentDidMount() {
     let items = window.localStorage.getItem("items")
-  
+
     if (items) {
       this.setState({ items: JSON.parse(items) })
     } else {
@@ -62,17 +64,11 @@ class App extends Component {
   }
 
   // eventHandler
-  deleteButton(key) {
-    // console.log("clicked the function from app", key)
-    const deletedArr = this.state.items.map((item, index) => {
-      if (key === item.key) {
-        // console.log("found the item", item, key);
-        item.deleted = !item.deleted
-      }
-      return item
-    });
-    this.setState({ items: deletedArr })
-  }
+  deleteButton(deleted) {
+    const deleteItems = this.state.items.filter(item => item.key !== deleted);
+    this.setState({ items: deleteItems});
+  };
+
   checkButton(key) {
     // console.log("clicked the function from app", key)
     const checkedArr = this.state.items.map((item, index) => {
@@ -83,20 +79,42 @@ class App extends Component {
       return item
     });
     this.setState({ items: checkedArr })
-      // is this where I can toggle the button???
   }
-  
-  numLeft(items) {
-    if(this.state.items.length === 1){
-        return `${this.state.items.length} item left`;
+
+//   activeButton(key) {
+//     const activeArr = this.state.items.map((item, index) => {
+//       if (key === item.key) {
+//         item.checked = item.checked
+//       }
+//       return item
+//     });
+//     this.setState({ items: activeArr })
+//   }
+
+  // allButton(key) {
+  //   const allArr = this.state.items.filter((item, index) => {
+  //     if (key === item.key) {
+  //       // is something needed??
+  //     }
+  //     return item
+  //   });
+  //   this.setState({ items: allArr })
+  // }
+
+//  clearComButton() {
+
+//  }
+
+
+  numLeft() {
+    if (this.state.items.length === 1) {
+      return `${this.state.items.length} item left`;
     } else {
-        return `${this.state.items.length} items left`;
+      return `${this.state.items.length} items left`;
     }
- }
+  }
 
   render() {
-
-   
 
     return (
       <>
@@ -112,9 +130,10 @@ class App extends Component {
             <input type="submit" value="Submit" />
           </form>
           <List
-            tasks={this.state.items}
+            items={this.state.items}
             deleteButton={this.deleteButton}
             checkButton={this.checkButton}
+            sorted={this.state.sorted}
           />
         </div>
         <div className="BottomBar text-center">
